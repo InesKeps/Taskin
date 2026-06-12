@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+*{
+    font-family: "poppins";
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shine {
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shine 3s linear infinite;
+  mask-image: linear-gradient(#000 0 0);
+}
+
