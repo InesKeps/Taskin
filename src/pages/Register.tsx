@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { registerUser } from '../store/authSlice';
 import type { AppDispatch, RootState } from '../store';
-import { FiZap, FiUser, FiMail, FiLock } from 'react-icons/fi';
+import { FiZap, FiUser, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state: RootState) => state.auth);
@@ -35,6 +37,8 @@ const Register = () => {
     'w-full pl-9 pr-3 py-2.5 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/50 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/30 focus:border-fuchsia-500/50 transition-all';
   const iconClass =
     'absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-600 pointer-events-none';
+  const toggleClass =
+    'absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-fuchsia-500 dark:text-gray-500 dark:hover:text-fuchsia-400 transition-colors';
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-gray-950 flex items-center justify-center p-4 relative overflow-hidden">
@@ -113,10 +117,19 @@ const Register = () => {
                 <FiLock className={iconClass} size={15} />
                 <input
                   {...formik.getFieldProps('password')}
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className={inputClass}
+                  autoComplete="new-password"
+                  className={`${inputClass} pr-10`}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className={toggleClass}
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
               </div>
               {formik.touched.password && formik.errors.password && (
                 <p className="text-red-400 text-xs mt-1">{formik.errors.password}</p>
@@ -131,10 +144,19 @@ const Register = () => {
                 <FiLock className={iconClass} size={15} />
                 <input
                   {...formik.getFieldProps('confirmPassword')}
-                  type="password"
+                  type={showConfirm ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className={inputClass}
+                  autoComplete="new-password"
+                  className={`${inputClass} pr-10`}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((s) => !s)}
+                  aria-label={showConfirm ? 'Hide password' : 'Show password'}
+                  className={toggleClass}
+                >
+                  {showConfirm ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
               </div>
               {formik.touched.confirmPassword && formik.errors.confirmPassword && (
                 <p className="text-red-400 text-xs mt-1">{formik.errors.confirmPassword}</p>

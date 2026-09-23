@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loginUser } from '../store/authSlice';
 import type { AppDispatch, RootState } from '../store';
-import { FiZap, FiMail, FiLock } from 'react-icons/fi';
+import { FiZap, FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state: RootState) => state.auth);
@@ -92,10 +93,19 @@ const Login = () => {
                 />
                 <input
                   {...formik.getFieldProps('password')}
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
-                  className="w-full pl-9 pr-3 py-2.5 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/50 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/30 focus:border-fuchsia-500/50 transition-all"
+                  autoComplete="current-password"
+                  className="w-full pl-9 pr-10 py-2.5 bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700/50 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/30 focus:border-fuchsia-500/50 transition-all"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-fuchsia-500 dark:text-gray-500 dark:hover:text-fuchsia-400 transition-colors"
+                >
+                  {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+                </button>
               </div>
               {formik.touched.password && formik.errors.password && (
                 <p className="text-red-400 text-xs mt-1">{formik.errors.password}</p>
